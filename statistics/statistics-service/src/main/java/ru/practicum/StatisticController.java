@@ -15,12 +15,14 @@ import stat.dto.StatCreationDto;
 import stat.dto.StatParams;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 public class StatisticController {
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final StatsServiceImpl service;
 
     @PostMapping("/hit")
@@ -36,8 +38,8 @@ public class StatisticController {
                                   @RequestParam(required = false) String[] uris,
                                   @RequestParam(defaultValue = "false") boolean unique) {
         StatParams params = StatParams.builder()
-                .start(LocalDateTime.parse(start))
-                .end(LocalDateTime.parse(end))
+                .start(LocalDateTime.parse(start, formatter))
+                .end(LocalDateTime.parse(end, formatter))
                 .uris(uris)
                 .unique(unique)
                 .build();
