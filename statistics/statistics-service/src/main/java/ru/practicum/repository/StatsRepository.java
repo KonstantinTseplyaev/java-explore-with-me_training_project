@@ -16,7 +16,7 @@ public interface StatsRepository extends JpaRepository<Stat, Long> {
     @Query("select new ru.practicum.dto.StatDto(st.app, st.uri, count(st.uri) as hits) " +
             "from Stat as st " +
             "where st.visitTime between ?1 and ?2 " +
-            "group by st.uri, st.app, order by hits desc")
+            "group by st.uri, st.app order by hits desc")
     List<StatDto> findAllStatistic(LocalDateTime start, LocalDateTime end);
 
     @Query("select new ru.practicum.dto.StatDto(st.app, st.uri, count(distinct st.ip) as hits) " +
