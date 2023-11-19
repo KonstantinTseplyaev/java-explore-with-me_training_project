@@ -1,6 +1,6 @@
 package ru.practicum;
 
-import ru.practicum.dto.StatDto;
+import stat.dto.StatDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

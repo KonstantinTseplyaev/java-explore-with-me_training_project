@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.practicum.model.Stat;
-import ru.practicum.dto.StatDto;
+import stat.dto.StatDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,27 +13,15 @@ import java.util.List;
 @Repository
 public interface StatsRepository extends JpaRepository<Stat, Long> {
 
-    @Query("select new ru.practicum.dto.StatDto(st.app, st.uri, count(st.uri) as hits) " +
+    @Query("select new stat.dto.StatDto(st.app, st.uri, count(st.uri) as hits) " +
             "from Stat as st " +
-            "where st.visitTime between ?1 and ?2 " +
+            "where (st.uri in :uris or :uris is null) and st.visitTime between :start and :end " +
             "group by st.uri, st.app order by hits desc")
-    List<StatDto> findAllStatistic(LocalDateTime start, LocalDateTime end);
+    List<StatDto> findStatistic(List<String> uris, LocalDateTime start, LocalDateTime end);
 
-    @Query("select new ru.practicum.dto.StatDto(st.app, st.uri, count(distinct st.ip) as hits) " +
+    @Query("select new stat.dto.StatDto(st.app, st.uri, count(distinct st.ip) as hits) " +
             "from Stat as st " +
-            "where st.visitTime between ?1 and ?2 " +
+            "where (st.uri in :uris or :uris is null) and st.visitTime between :start and :end " +
             "group by st.uri, st.app order by hits desc")
-    List<StatDto> findAllUniqueStatistic(LocalDateTime start, LocalDateTime end);
-
-    @Query("select new ru.practicum.dto.StatDto(st.app, st.uri, count(st.uri) as hits) " +
-            "from Stat as st " +
-            "where st.uri in ?1 and st.visitTime between ?2 and ?3 " +
-            "group by st.uri, st.app order by hits desc")
-    List<StatDto> findStatisticByUris(List<String> uris, LocalDateTime start, LocalDateTime end);
-
-    @Query("select new ru.practicum.dto.StatDto(st.app, st.uri, count(distinct st.ip) as hits) " +
-            "from Stat as st " +
-            "where st.uri in ?1 and st.visitTime between ?2 and ?3 " +
-            "group by st.uri, st.app order by hits desc")
-    List<StatDto> findUniqueStatisticByUris(List<String> uris, LocalDateTime start, LocalDateTime end);
+    List<StatDto> findUniqueStatistic(List<String> uris, LocalDateTime start, LocalDateTime end);
 }

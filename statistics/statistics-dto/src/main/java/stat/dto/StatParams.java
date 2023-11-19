@@ -1,7 +1,6 @@
 package stat.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,13 +13,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StatParams {
-    @JsonDeserialize(using = CustomDeserializer.class)
-    @JsonSerialize(using = CustomSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime start;
-    @JsonDeserialize(using = CustomDeserializer.class)
-    @JsonSerialize(using = CustomSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime end;
-    @Builder.Default
-    private String[] uris = {};
+    private String[] uris;
     private boolean unique;
 }
