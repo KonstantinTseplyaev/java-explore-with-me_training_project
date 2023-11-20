@@ -1,7 +1,7 @@
 package ru.practicum.service;
 
 
-import stat.dto.StatDto;
+import ru.practicum.dto.StatDto;
 import stat.dto.StatCreationDto;
 import stat.dto.StatParams;
 
