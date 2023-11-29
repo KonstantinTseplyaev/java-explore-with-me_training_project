@@ -41,8 +41,10 @@ services:
     container_name: ewm-db
     ports:
       - "5433:5432"
-    depends_on:
-      - stats-client
+    environment:
+      - POSTGRES_MAIN_DB=ewm
+      - POSTGRES_USER=Konstantin
+      - POSTGRES_PASSWORD=finalproject
 
   ewm-service:
     build: ./ewm-service
@@ -50,5 +52,11 @@ services:
     ports:
       - "8080:8080"
     depends_on:
+      - stats-client
       - ewm-db
+    environment:
+      - STATS_CLIENT_URL=http://stats-client:9090
+      - SPRING_MAIN_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm
+      - POSTGRES_USER=Konstantin
+      - POSTGRES_PASSWORD=finalproject
 
