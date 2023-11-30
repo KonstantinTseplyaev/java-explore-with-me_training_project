@@ -1,14 +1,26 @@
 version: '3.8'
 services:
-  stats-db:
+  stat-db:
     image: postgres:14-alpine
     volumes:
       - /var/lib/postgresql/data/
-    container_name: ewm-stats-db
+    container_name: ewm-stat-db
     ports:
-      - "5432:5432"
+      - "5435:5432"
     environment:
       - POSTGRES_DB=ewm-stats
+      - POSTGRES_USER=Konstantin
+      - POSTGRES_PASSWORD=finalproject
+
+  ewm-db:
+    image: postgres:14-alpine
+    volumes:
+      - /var/lib/postgresql/data/
+    container_name: ewm-db
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=ewm
       - POSTGRES_USER=Konstantin
       - POSTGRES_PASSWORD=finalproject
 
@@ -18,9 +30,9 @@ services:
     ports:
       - "9095:9095"
     depends_on:
-      - stats-db
+      - stat-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ewm-stats
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stat-db/ewm-stats
       - POSTGRES_USER=Konstantin
       - POSTGRES_PASSWORD=finalproject
 
@@ -34,29 +46,15 @@ services:
     environment:
       - STATS_SERVICE_URL=http://stats-service:9095
 
-  ewm-db:
-    image: postgres:14-alpine
-    volumes:
-      - /var/lib/postgresql/data/
-    container_name: ewm-db
-    ports:
-      - "5433:5432"
-    environment:
-      - POSTGRES_MAIN_DB=ewm
-      - POSTGRES_USER=Konstantin
-      - POSTGRES_PASSWORD=finalproject
-
   ewm-service:
     build: ./ewm-service
     container_name: evm-service
     ports:
       - "8080:8080"
     depends_on:
-      - stats-client
       - ewm-db
     environment:
       - STATS_CLIENT_URL=http://stats-client:9090
-      - SPRING_MAIN_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db/ewm
       - POSTGRES_USER=Konstantin
       - POSTGRES_PASSWORD=finalproject
-
