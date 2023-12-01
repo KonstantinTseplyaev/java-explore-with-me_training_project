@@ -1,7 +1,6 @@
 package ru.practicum.mapper;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.context.annotation.Configuration;
 import ru.practicum.model.category.Category;
 import ru.practicum.model.category.dto.CategoryDto;
 import ru.practicum.model.compilation.Compilation;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Configuration
 public class MapperUtil {
     private static final ModelMapper modelMapper = new ModelMapper();
 
@@ -68,6 +66,26 @@ public class MapperUtil {
                 .publishedOn(null)
                 .state(EventState.PENDING)
                 .views(0)
+                .build();
+    }
+
+    public static EventDto convertToEventDto(Event event) {
+        return EventDto.builder()
+                .id(event.getId())
+                .title(event.getTitle())
+                .annotation(event.getAnnotation())
+                .category(convertToCategoryDto(event.getCategory()))
+                .createdOn(event.getCreatedOn())
+                .description(event.getDescription())
+                .eventDate(event.getEventDate())
+                .initiator(convertToUserShortDto(event.getInitiator()))
+                .location(convertToLocationDto(event.getLocation()))
+                .paid(event.isPaid())
+                .participantLimit(event.getParticipantLimit())
+                .requestModeration(event.isRequestModeration())
+                .publishedOn(event.getPublishedOn())
+                .state(event.getState())
+                .views(event.getViews())
                 .build();
     }
 
@@ -160,15 +178,6 @@ public class MapperUtil {
         return Compilation.builder()
                 .title(compilationDto.getTitle())
                 .pinned(compilationDto.isPinned())
-                .events(events)
-                .build();
-    }
-
-    public static CompilationDto convertToCompilationDto(Compilation compilation, List<EventShortDto> events) {
-        return CompilationDto.builder()
-                .id(compilation.getId())
-                .title(compilation.getTitle())
-                .pinned(compilation.isPinned())
                 .events(events)
                 .build();
     }

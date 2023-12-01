@@ -44,7 +44,7 @@ public class EwmStatisticClient {
                 .ip(ip)
                 .uri(requestURI)
                 .timestamp(LocalDateTime.now())
-                .app("ewm-service")
+                .app("${service.name}")
                 .build();
         String path = uri + "/hit";
         return makeAndSendRequest(HttpMethod.POST, path, null, statCreationDto);
@@ -59,7 +59,7 @@ public class EwmStatisticClient {
         params.put("uris", uris);
         String path = uri + "/stats?start={start}&end={end}&unique={unique}&uris={uris}";
         Object response = makeAndSendRequest(HttpMethod.GET, path, params, null).getBody();
-        StatisticDto statistics = null;
+        StatisticDto statistics;
         try {
             statistics = convertToStatisticDto(response);
         } catch (JsonProcessingException e) {

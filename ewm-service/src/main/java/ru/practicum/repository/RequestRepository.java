@@ -1,5 +1,6 @@
 package ru.practicum.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,21 +12,15 @@ import ru.practicum.model.request.dto.RequestDto;
 import java.util.List;
 import java.util.Optional;
 
-import static ru.practicum.service.request.RequestServiceImpl.REQUEST_DTO_REQUEST;
 
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
 
     boolean existsByRequesterIdAndEventId(long userId, long eventId);
 
-    @Query(REQUEST_DTO_REQUEST + "where r.id = :requestId and r.requester.id = :userId and r.state is not 'CANCELED'")
-    Optional<RequestDto> findRequestForCancel(long requestId, long userId);
+    List<Request> findByRequesterId(long userId);
 
-    @Query(REQUEST_DTO_REQUEST + "where r.requester.id = :userId")
-    List<RequestDto> findByRequesterId(long userId);
-
-    @Query(REQUEST_DTO_REQUEST + "where r.event.id = :eventId")
-    List<RequestDto> findByEventId(long eventId);
+    List<Request> findByEventId(long eventId);
 
     @Modifying
     @Query(value = "update requests set state = :actualState where event_id = :eventId " +
@@ -33,16 +28,29 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             "and id in :requestIds", nativeQuery = true)
     int updateRequestByIds(long eventId, List<Long> requestIds, String actualState);
 
-    @Query(REQUEST_DTO_REQUEST + "where r.event.id = :eventId and r.id in :ids")
-    List<RequestDto> findUpdatedRequestsByEvent(long eventId, List<Long> ids);
-
-    @Modifying
-    @Query(value = "update requests set state = :actualState " +
-            "where id = :requestId", nativeQuery = true)
-    void updateRequestById(long requestId, String actualState);
 
     int countAllByEventIdAndState(long eventId, RequestState state);
 
-    @Query(REQUEST_DTO_REQUEST + "where r.state = 'CONFIRMED'")
+    @Query("select new ru.practicum.model.request.dto.RequestDto(" +
+            "r.id, " +
+            "r.event.id, " +
+            "r.requester.id, " +
+            "r.created, " +
+            "r.state) " +
+            "from Request as r where r.state = 'CONFIRMED'")
     List<RequestDto> findAllConfirmRequest();
+
+    @Query("select new ru.practicum.model.request.dto.RequestDto(" +
+            "r.id, " +
+            "r.event.id, " +
+            "r.requester.id, " +
+            "r.created, " +
+            "r.state) " +
+            "from Request as r where r.state = 'CONFIRMED' and r.event.id in :ids")
+    List<RequestDto> findConfirmRequestByEventsId(List<Long> ids);
+
+    Optional<Request> findByRequesterIdAndId(long userId, long requestId);
+
+    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = {"event", "requester"})
+    List<Request> findByEventIdAndIdIn(long eventId, List<Long> ids);
 }

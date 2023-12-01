@@ -31,13 +31,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto updateCategory(long catId, CategoryDto categoryDto) {
-        if (!categoryRepository.existsById(catId)) {
-            throw new ModelNotFoundException("Category with id=" + catId + " was not found");
-        }
-        categoryDto.setId(catId);
-        Category updatedCat = MapperUtil.convertToCategory(categoryDto);
-        return MapperUtil.convertToCategoryDto(categoryRepository.save(updatedCat));
+    public CategoryDto updateCategory(CategoryDto categoryDto) {
+        Category category = categoryRepository.findById(categoryDto.getId()).orElseThrow(() ->
+                new ModelNotFoundException("Category with id=" + categoryDto.getId() + " was not found"));
+        category.setName(categoryDto.getName());
+        return MapperUtil.convertToCategoryDto(categoryRepository.save(category));
     }
 
     @Override

@@ -7,7 +7,6 @@ import ru.practicum.exceptions.ModelNotFoundException;
 import ru.practicum.exceptions.RequestEventException;
 import ru.practicum.mapper.MapperUtil;
 import ru.practicum.model.event.Event;
-import ru.practicum.model.event.dto.EventDto;
 import ru.practicum.model.request.Request;
 import ru.practicum.model.request.RequestState;
 import ru.practicum.model.request.dto.RequestDto;
@@ -32,13 +31,6 @@ import static ru.practicum.model.request.RequestState.REJECTED;
 @RequiredArgsConstructor
 @Transactional
 public class RequestServiceImpl implements RequestService {
-    public static final String REQUEST_DTO_REQUEST = "select new ru.practicum.model.request.dto.RequestDto(" +
-            "r.id, " +
-            "r.event.id, " +
-            "r.requester.id, " +
-            "r.created, " +
-            "r.state) " +
-            "from Request as r ";
     private final RequestRepository requestRepository;
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
@@ -73,25 +65,26 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public RequestDto cancelRequest(long userId, long requestId) {
-        RequestDto request = requestRepository.findRequestForCancel(requestId, userId)
+        Request request = requestRepository.findByRequesterIdAndId(userId, requestId)
                 .orElseThrow(() -> new ModelNotFoundException("Request with id=" + requestId + " was not found"));
-        request.setStatus(CANCELED);
-        requestRepository.updateRequestById(requestId, CANCELED.name());
-        return request;
+        request.setState(CANCELED);
+        return MapperUtil.convertToRequestDto(requestRepository.save(request));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<RequestDto> getRequestsByUserId(long userId) {
-        return requestRepository.findByRequesterId(userId);
+        return MapperUtil.convertList(requestRepository.findByRequesterId(userId), MapperUtil::convertToRequestDto);
     }
 
     @Override
     public UpdatedEventRequestStatusesResultDto updateRequestsStates(long userId, long eventId,
                                                                      UpdatedEventRequestStatusesDto requestUpdatedDto) {
-        EventDto event = eventRepository.findEventByIdAndInitiatorId(eventId, userId)
+        Event event = eventRepository.findEventByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new ModelNotFoundException("User with id=" + userId + " doesn't have an event " +
                         "with id=" + eventId));
+
+        int confirmedRequests = requestRepository.countAllByEventIdAndState(eventId, CONFIRMED);
 
         RequestState actualState = requestUpdatedDto.getStatus();
         List<Long> ids = requestUpdatedDto.getRequestIds();
@@ -101,10 +94,10 @@ public class RequestServiceImpl implements RequestService {
                 throw new RequestEventException("Request must have status PENDING");
             }
         } else if (actualState == CONFIRMED) {
-            if (event.getParticipantLimit() == event.getConfirmedRequests()) {
+            if (event.getParticipantLimit() == confirmedRequests) {
                 throw new RequestEventException("The participant limit has been reached");
             }
-            long vacant = event.getParticipantLimit() - event.getConfirmedRequests();
+            long vacant = event.getParticipantLimit() - confirmedRequests;
             if (vacant >= ids.size()) {
                 requestRepository.updateRequestByIds(eventId, ids, CONFIRMED.name());
             } else {
@@ -116,17 +109,23 @@ public class RequestServiceImpl implements RequestService {
         } else {
             throw new RuntimeException("Unsupported state!");
         }
-        List<RequestDto> requests = requestRepository.findUpdatedRequestsByEvent(eventId, ids);
-        Map<RequestState, List<RequestDto>> requestMap = requests.stream()
-                .collect(Collectors.groupingBy(RequestDto::getStatus));
-        return new UpdatedEventRequestStatusesResultDto(requestMap.get(CONFIRMED), requestMap.get(REJECTED));
+
+        List<Request> updatedRequests = requestRepository.findByEventIdAndIdIn(eventId, ids);
+        Map<RequestState, List<Request>> requestMap = updatedRequests.stream()
+                .collect(Collectors.groupingBy(Request::getState));
+        List<RequestDto> confReq = MapperUtil
+                .convertList(requestMap.getOrDefault(CONFIRMED, List.of()), MapperUtil::convertToRequestDto);
+        List<RequestDto> rejReq = MapperUtil
+                .convertList(requestMap.getOrDefault(REJECTED, List.of()), MapperUtil::convertToRequestDto);
+        return new UpdatedEventRequestStatusesResultDto(confReq, rejReq);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<RequestDto> getRequestsByEventId(long userId, long eventId) {
-        if (!eventRepository.existsByIdAndInitiatorId(eventId, userId))
+        List<Request> requests = requestRepository.findByEventId(eventId);
+        if (requests.isEmpty())
             throw new ModelNotFoundException("User with id=" + userId + " doesn't have an event with id=" + eventId);
-        return requestRepository.findByEventId(eventId);
+        return MapperUtil.convertList(requests, MapperUtil::convertToRequestDto);
     }
 }

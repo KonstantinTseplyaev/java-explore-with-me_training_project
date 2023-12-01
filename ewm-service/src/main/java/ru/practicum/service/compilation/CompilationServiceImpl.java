@@ -12,7 +12,6 @@ import ru.practicum.model.compilation.dto.CompilationCreationDto;
 import ru.practicum.model.compilation.dto.CompilationDto;
 import ru.practicum.model.compilation.dto.CompilationForUpdateDto;
 import ru.practicum.model.event.Event;
-import ru.practicum.model.event.dto.EventShortDto;
 import ru.practicum.model.request.dto.RequestDto;
 import ru.practicum.repository.CompilationRepository;
 import ru.practicum.repository.EventRepository;
@@ -36,8 +35,7 @@ public class CompilationServiceImpl implements CompilationService {
     public CompilationDto createCompilation(CompilationCreationDto compilationDto) {
         List<Event> events = checkEvents(compilationDto.getEvents());
         Compilation compilation = compilationRepository.save(MapperUtil.convertToCompilation(events, compilationDto));
-        List<EventShortDto> eventShortList = eventRepository.findEventShortByIdIn(compilationDto.getEvents());
-        return MapperUtil.convertToCompilationDto(compilation, eventShortList);
+        return MapperUtil.convertToCompilationDto(compilation);
     }
 
     @Override
@@ -52,8 +50,7 @@ public class CompilationServiceImpl implements CompilationService {
         compilation.setPinned(compilation.isPinned());
         if (compilationDto.getTitle() != null) compilation.setTitle(compilationDto.getTitle());
         if (compilationDto.getEvents() != null) compilation.setEvents(checkEvents(compilationDto.getEvents()));
-        List<EventShortDto> eventShortList = eventRepository.findEventShortByIdIn(compilationDto.getEvents());
-        return MapperUtil.convertToCompilationDto(compilationRepository.save(compilation), eventShortList);
+        return MapperUtil.convertToCompilationDto(compilationRepository.save(compilation));
     }
 
     @Override
@@ -61,9 +58,7 @@ public class CompilationServiceImpl implements CompilationService {
     public CompilationDto getCompilationById(long compId) {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new ModelNotFoundException("Compilation with id =" + compId + " was not found"));
-        List<Long> eventIds = compilation.getEvents().stream().map(Event::getId).collect(Collectors.toList());
-        List<EventShortDto> eventShortList = eventRepository.findEventShortByIdIn(eventIds);
-        return MapperUtil.convertToCompilationDto(compilation, eventShortList);
+        return MapperUtil.convertToCompilationDto(compilation);
     }
 
     @Override

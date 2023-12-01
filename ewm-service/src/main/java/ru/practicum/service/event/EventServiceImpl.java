@@ -17,7 +17,6 @@ import ru.practicum.model.category.Category;
 import ru.practicum.model.event.Event;
 import ru.practicum.model.event.EventRequestParam;
 import ru.practicum.model.event.EventShortRequestParam;
-import ru.practicum.model.event.EventState;
 import ru.practicum.model.event.Location;
 import ru.practicum.model.event.StateAction;
 import ru.practicum.model.event.dto.EventCreationDto;
@@ -26,6 +25,7 @@ import ru.practicum.model.event.dto.EventShortDto;
 import ru.practicum.model.event.dto.LocationDto;
 import ru.practicum.model.event.dto.UpdatedEventDto;
 import ru.practicum.model.request.RequestState;
+import ru.practicum.model.request.dto.RequestDto;
 import ru.practicum.model.user.User;
 import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
@@ -34,54 +34,21 @@ import ru.practicum.repository.RequestRepository;
 import ru.practicum.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static ru.practicum.model.event.EventState.CANCELED;
 import static ru.practicum.model.event.EventState.PENDING;
 import static ru.practicum.model.event.EventState.PUBLISHED;
+import static ru.practicum.model.request.RequestState.CONFIRMED;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class EventServiceImpl implements EventService {
-    public static final String EVENT_DTO_REQUEST = "select new ru.practicum.model.event.dto.EventDto(" +
-            "e.id, " +
-            "e.title, " +
-            "e.annotation, " +
-            "(select c.id from Category as c where c.id = e.category.id), " +
-            "(select c.name from Category as c where c.id = e.category.id), " +
-            "(select count(r.id) from Request as r where (r.event.id = e.id) and (r.state = 'CONFIRMED')), " +
-            "e.createdOn, " +
-            "e.description, " +
-            "e.eventDate, " +
-            "(select u.id from User as u where u.id = e.initiator.id), " +
-            "(select u.name from User as u where u.id = e.initiator.id), " +
-            "(select l.lat from Location as l where l.lat = e.location.lat), " +
-            "(select l.lon from Location as l where l.lon = e.location.lon), " +
-            "e.paid, " +
-            "e.participantLimit, " +
-            "e.publishedOn, " +
-            "e.requestModeration, " +
-            "e.state, " +
-            "e.views) " +
-            "from Event as e ";
-
-    public static final String EVENT_SHORT_DTO_REQUEST = "select new ru.practicum.model.event.dto.EventShortDto(" +
-            "e.id, " +
-            "e.title, " +
-            "e.annotation, " +
-            "(select c.id from Category as c where c.id = e.category.id), " +
-            "(select c.name from Category as c where c.id = e.category.id), " +
-            "(select count(r.id) from Request as r where (r.event.id = e.id) and (r.state = 'CONFIRMED')), " +
-            "e.eventDate, " +
-            "(select u.id from User as u where u.id = e.initiator.id), " +
-            "(select u.name from User as u where u.id = e.initiator.id), " +
-            "e.paid, " +
-            "e.views) " +
-            "from Event as e ";
     private final ObjectMapper objectMapper = JsonMapper.builder().build();
     private final EventRepository eventRepository;
     private final LocationRepository locationRepository;
@@ -110,15 +77,21 @@ public class EventServiceImpl implements EventService {
     @Transactional(readOnly = true)
     public List<EventDto> getEventsByUserId(long userId, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
-        return eventRepository.findByInitiatorId(userId, pageable);
+        List<Event> events = eventRepository.findByInitiatorId(userId, pageable);
+        List<Long> ids = events.stream().map(Event::getId).collect(Collectors.toList());
+        List<RequestDto> confRequestsDto = requestRepository.findConfirmRequestByEventsId(ids);
+        return convertResultToEventDto(confRequestsDto, events);
     }
 
     @Override
     @Transactional(readOnly = true)
     public EventDto getEventById(long userId, long eventId) {
-        return eventRepository.findEventByIdAndInitiatorId(eventId, userId)
+        Event event = eventRepository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new ModelNotFoundException("Event with id=" + eventId + " was not found"));
+        int confirmedRequests = requestRepository.countAllByEventIdAndState(eventId, CONFIRMED);
+        return MapperUtil.convertToEventDto(event, confirmedRequests);
     }
+
 
     @Override
     public EventDto updateEvent(long userId, long eventId, UpdatedEventDto eventDto) {
@@ -163,14 +136,11 @@ public class EventServiceImpl implements EventService {
     @Transactional(readOnly = true)
     public List<EventDto> getEventByParam(EventRequestParam param) {
         Pageable pageable = PageRequest.of(param.getFrom() / param.getSize(), param.getSize());
-        List<Long> users = null;
-        List<EventState> states = null;
-        List<Long> categories = null;
-        if (param.getUsers().length != 0) users = Arrays.asList(param.getUsers());
-        if (param.getStates().length != 0) states = Arrays.asList(param.getStates());
-        if (param.getCategories().length != 0) categories = Arrays.asList(param.getCategories());
-        return eventRepository.findEventsByParam(users, states,
-                categories, param.getRangeStart(), param.getRangeEnd(), pageable);
+        List<Event> events = eventRepository.findEventsByParam(param.getUsers(), param.getStates(),
+                param.getCategories(), param.getRangeStart(), param.getRangeEnd(), pageable);
+        List<Long> ids = events.stream().map(Event::getId).collect(Collectors.toList());
+        List<RequestDto> confRequestsDto = requestRepository.findConfirmRequestByEventsId(ids);
+        return convertResultToEventDto(confRequestsDto, events);
     }
 
     @Override
@@ -218,8 +188,10 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventDto getPublicEventById(long id, long views) {
         eventRepository.updateEventViews(id, views);
-        return eventRepository.getPublicEventById(id)
+        Event event = eventRepository.findEventByIdAndState(id, PUBLISHED)
                 .orElseThrow(() -> new ModelNotFoundException("Event with id=" + id + " was not found"));
+        int confirmedRequest = requestRepository.countAllByEventIdAndState(id, RequestState.CONFIRMED);
+        return MapperUtil.convertToEventDto(event, confirmedRequest);
     }
 
     @Override
@@ -231,23 +203,18 @@ public class EventServiceImpl implements EventService {
 
         if (param.getText() != null) param.setText(param.getText().toLowerCase(Locale.ROOT));
 
-        List<Long> categories = null;
-
-        if (param.getCategories().length != 0) {
-            categories = Arrays.asList(param.getCategories());
-            if (categories.contains(0L))
-                throw new EventDateIncorrectException("Validation param exp"); //добавил проверку, чтобы проходился постман-тест. По факту она здесь не нужна, да и не видел в требованиях
+        if (param.getCategories() != null) {
+            if (param.getCategories().contains(0L))
+                throw new EventDateIncorrectException("Validation param exp");
         }
+
         Pageable page = PageRequest.of(param.getFrom() / param.getSize(), param.getSize());
-        return eventRepository.findPublicEventsByParam(
-                param.getText(),
-                categories,
-                param.getPaid(),
-                param.getRangeStart(),
-                param.getRangeEnd(),
-                param.isOnlyAvailable(),
-                param.getSort(),
-                page);
+        List<Event> events = eventRepository.findPublicEventsByParam(param.getText(), param.getCategories(),
+                param.getPaid(), param.getRangeStart(), param.getRangeEnd(), param.isOnlyAvailable(),
+                param.getSort(), page);
+        List<Long> ids = events.stream().map(Event::getId).collect(Collectors.toList());
+        List<RequestDto> confRequestsDto = requestRepository.findConfirmRequestByEventsId(ids);
+        return convertResultToEventShortDto(confRequestsDto, events);
     }
 
     private String createSortForQuery(String sort) {
@@ -296,5 +263,27 @@ public class EventServiceImpl implements EventService {
             throw new EventDateIncorrectException("Field: eventDate. Error: должно содержать дату, " +
                     "которая еще не наступила. Value: " + eventDate);
         }
+    }
+
+    private List<EventShortDto> convertResultToEventShortDto(List<RequestDto> requests, List<Event> events) {
+        Map<Long, List<RequestDto>> confirmedRequestsMap = requests.stream()
+                .collect(Collectors.groupingBy(RequestDto::getEvent));
+        List<EventShortDto> eventsDto = MapperUtil.convertList(events, MapperUtil::convertToEventShortDto);
+        return eventsDto.stream().peek(event -> {
+            int count = confirmedRequestsMap
+                    .getOrDefault(event.getId(), List.of()).size();
+            event.setConfirmedRequests(count);
+        }).collect(Collectors.toList());
+    }
+
+    private List<EventDto> convertResultToEventDto(List<RequestDto> requests, List<Event> events) {
+        Map<Long, List<RequestDto>> confirmedRequestsMap = requests.stream()
+                .collect(Collectors.groupingBy(RequestDto::getEvent));
+        List<EventDto> eventsDto = MapperUtil.convertList(events, MapperUtil::convertToEventDto);
+        return eventsDto.stream().peek(event -> {
+            int count = confirmedRequestsMap
+                    .getOrDefault(event.getId(), List.of()).size();
+            event.setConfirmedRequests(count);
+        }).collect(Collectors.toList());
     }
 }
