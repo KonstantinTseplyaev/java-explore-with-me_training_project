@@ -1,5 +1,7 @@
 package ru.practicum;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.practicum.dto.StatDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,7 @@ import stat.dto.StatParams;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -45,5 +48,12 @@ public class StatisticController {
                 .build();
         log.info("статистику отдаю по заданным параметрам: {}", params);
         return service.getStatistic(params);
+    }
+
+    @ExceptionHandler(value = StatParamsException.class)
+    public ResponseEntity<Map<String, String>> handleStatParamsExp(final StatParamsException exp) {
+        log.error(exp.getMessage());
+        return ResponseEntity.status(400).body((Map.of("error", "Ошибка при указании параметров запроса",
+                "errorMessage", exp.getMessage())));
     }
 }
