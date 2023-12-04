@@ -11,18 +11,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exceptions.EventDateIncorrectException;
 import ru.practicum.exceptions.EventStateException;
+import ru.practicum.exceptions.LocationException;
 import ru.practicum.exceptions.ModelNotFoundException;
 import ru.practicum.mapper.MapperUtil;
 import ru.practicum.model.category.Category;
 import ru.practicum.model.event.Event;
 import ru.practicum.model.event.EventRequestParam;
 import ru.practicum.model.event.EventShortRequestParam;
-import ru.practicum.model.event.Location;
+import ru.practicum.model.location.Location;
 import ru.practicum.model.event.StateAction;
 import ru.practicum.model.event.dto.EventCreationDto;
 import ru.practicum.model.event.dto.EventDto;
 import ru.practicum.model.event.dto.EventShortDto;
-import ru.practicum.model.event.dto.LocationDto;
+import ru.practicum.model.location.dto.LocationCreationDto;
+import ru.practicum.model.location.dto.LocationDto;
 import ru.practicum.model.event.dto.UpdatedEventDto;
 import ru.practicum.model.request.RequestState;
 import ru.practicum.model.request.dto.RequestDto;
@@ -37,7 +39,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static ru.practicum.model.event.EventState.CANCELED;
@@ -137,7 +138,7 @@ public class EventServiceImpl implements EventService {
     public List<EventDto> getEventByParam(EventRequestParam param) {
         Pageable pageable = PageRequest.of(param.getFrom() / param.getSize(), param.getSize());
         List<Event> events = eventRepository.findEventsByParam(param.getUsers(), param.getStates(),
-                param.getCategories(), param.getRangeStart(), param.getRangeEnd(), pageable);
+                param.getCategories(), param.getLocations(), param.getRangeStart(), param.getRangeEnd(), pageable);
         List<Long> ids = events.stream().map(Event::getId).collect(Collectors.toList());
         List<RequestDto> confRequestsDto = requestRepository.findConfirmRequestByEventsId(ids);
         return convertResultToEventDto(confRequestsDto, events);
@@ -210,11 +211,58 @@ public class EventServiceImpl implements EventService {
 
         Pageable page = PageRequest.of(param.getFrom() / param.getSize(), param.getSize());
         List<Event> events = eventRepository.findPublicEventsByParam(param.getText(), param.getCategories(),
-                param.getPaid(), param.getRangeStart(), param.getRangeEnd(), param.isOnlyAvailable(),
-                param.getSort(), page);
+                param.getPaid(), param.getRangeStart(), param.getRangeEnd(),
+                param.isOnlyAvailable(), param.getSort(), page);
         List<Long> ids = events.stream().map(Event::getId).collect(Collectors.toList());
         List<RequestDto> confRequestsDto = requestRepository.findConfirmRequestByEventsId(ids);
         return convertResultToEventShortDto(confRequestsDto, events);
+    }
+
+    @Override
+    public LocationDto addLocation(LocationDto locationDto) {
+        if (locationRepository.existsByLatAndLonAndRadius(locationDto.getLat(),
+                locationDto.getLon(), locationDto.getRadius())) {
+            throw new LocationException("Location already exists!");
+        }
+        Location location = locationRepository.save(MapperUtil.convertToLocation(locationDto));
+        return MapperUtil.convertToLocationDto(location);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<LocationDto> getAllLocations(int from, int size) {
+        Pageable page = PageRequest.of(from / size, size);
+        List<Location> locations = locationRepository.findByNameIsNotNull(page);
+        return MapperUtil.convertList(locations, MapperUtil::convertToLocationDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public LocationDto getLocationById(long locId) {
+        Location location = locationRepository.findByIdAndNameIsNotNull(locId)
+                .orElseThrow(() -> new ModelNotFoundException("Location with id " + locId + " was not found"));
+        return MapperUtil.convertToLocationDto(location);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<EventDto> getEventsByLocationZone(long zoneId) {
+        Location zone = locationRepository.findById(zoneId)
+                .orElseThrow(() -> new ModelNotFoundException("Location with id " + zoneId + " was not found"));
+        if (zone.getRadius() == 0) {
+            throw new LocationException("Location's radius must be not 0!");
+        }
+        List<Event> events = eventRepository.findEventsByLocationZone(zone.getLat(), zone.getLon(), zone.getRadius());
+        return MapperUtil.convertList(events, MapperUtil::convertToEventDto);
+    }
+
+    @Override
+    public LocationDto updateLocation(LocationDto updatedLocationDto) {
+        Location location = locationRepository.findById(updatedLocationDto.getId())
+                .orElseThrow(() -> new ModelNotFoundException("Location with id " + updatedLocationDto.getId() +
+                        " was not found"));
+        location.setName(updatedLocationDto.getName());
+        return MapperUtil.convertToLocationDto(locationRepository.save(location));
     }
 
     private String createSortForQuery(String sort) {
@@ -253,9 +301,13 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private Location checkLocation(LocationDto loc) {
-        Optional<Location> location = locationRepository.findByLatAndLon(loc.getLat(), loc.getLon());
-        return location.orElseGet(() -> locationRepository.save(MapperUtil.convertToLocation(loc)));
+    private Location checkLocation(LocationCreationDto loc) {
+        if (loc.getId() != null) {
+            return locationRepository.findByIdAndNameIsNotNull(loc.getId()).orElseThrow(() ->
+                    new ModelNotFoundException("Location with id " + loc.getId() + " was not found"));
+        } else {
+            return locationRepository.save(MapperUtil.convertToLocation(loc));
+        }
     }
 
     private void checkEventDate(LocalDateTime eventDate) {

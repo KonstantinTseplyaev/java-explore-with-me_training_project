@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.model.category.Category;
 import ru.practicum.model.compilation.Compilation;
+import ru.practicum.model.location.Location;
 import ru.practicum.model.user.User;
 
 import javax.persistence.CascadeType;

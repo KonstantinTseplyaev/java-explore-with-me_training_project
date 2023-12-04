@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import ru.practicum.model.location.dto.LocationCreationDto;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
@@ -35,7 +36,7 @@ public class EventCreationDto {
     @NotNull
     private LocalDateTime eventDate;
     @NotNull
-    private LocationDto location;
+    private LocationCreationDto location;
     @Builder.Default
     private boolean paid = false;
     @Builder.Default

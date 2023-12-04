@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import ru.practicum.model.event.StateAction;
+import ru.practicum.model.location.dto.LocationCreationDto;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.PositiveOrZero;
@@ -31,7 +32,7 @@ public class UpdatedEventDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Future
     private LocalDateTime eventDate;
-    private LocationDto location;
+    private LocationCreationDto location;
     private StateAction stateAction;
     private Boolean paid;
     private Integer participantLimit;

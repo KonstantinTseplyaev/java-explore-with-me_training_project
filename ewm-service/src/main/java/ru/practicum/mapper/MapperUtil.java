@@ -8,11 +8,13 @@ import ru.practicum.model.compilation.dto.CompilationCreationDto;
 import ru.practicum.model.compilation.dto.CompilationDto;
 import ru.practicum.model.event.Event;
 import ru.practicum.model.event.EventState;
-import ru.practicum.model.event.Location;
+import ru.practicum.model.location.Location;
 import ru.practicum.model.event.dto.EventCreationDto;
 import ru.practicum.model.event.dto.EventDto;
 import ru.practicum.model.event.dto.EventShortDto;
-import ru.practicum.model.event.dto.LocationDto;
+import ru.practicum.model.location.dto.LocationCreationDto;
+import ru.practicum.model.location.dto.LocationDto;
+import ru.practicum.model.location.dto.LocationForEventDto;
 import ru.practicum.model.request.Request;
 import ru.practicum.model.request.RequestState;
 import ru.practicum.model.request.dto.RequestDto;
@@ -79,7 +81,7 @@ public class MapperUtil {
                 .description(event.getDescription())
                 .eventDate(event.getEventDate())
                 .initiator(convertToUserShortDto(event.getInitiator()))
-                .location(convertToLocationDto(event.getLocation()))
+                .location(convertToLocationForEventDto(event.getLocation()))
                 .paid(event.isPaid())
                 .participantLimit(event.getParticipantLimit())
                 .requestModeration(event.isRequestModeration())
@@ -93,6 +95,18 @@ public class MapperUtil {
         return modelMapper.map(locationDto, Location.class);
     }
 
+    public static Location convertToLocation(LocationCreationDto locationDto) {
+        return modelMapper.map(locationDto, Location.class);
+    }
+
+    public static LocationForEventDto convertToLocationForEventDto(Location location) {
+        return new LocationForEventDto(location.getLat(), location.getLon());
+    }
+
+    public static LocationForEventDto convertToLocationForEventDto(LocationDto location) {
+        return new LocationForEventDto(location.getLat(), location.getLon());
+    }
+
     public static EventDto convertToEventDto(CategoryDto cat, UserShortDto initiator, LocationDto loc, Event event) {
         return EventDto.builder()
                 .id(event.getId())
@@ -103,7 +117,7 @@ public class MapperUtil {
                 .description(event.getDescription())
                 .eventDate(event.getEventDate())
                 .initiator(initiator)
-                .location(loc)
+                .location(convertToLocationForEventDto(loc))
                 .paid(event.isPaid())
                 .participantLimit(event.getParticipantLimit())
                 .requestModeration(event.isRequestModeration())
@@ -124,7 +138,7 @@ public class MapperUtil {
                 .description(event.getDescription())
                 .eventDate(event.getEventDate())
                 .initiator(convertToUserShortDto(event.getInitiator()))
-                .location(convertToLocationDto(event.getLocation()))
+                .location(convertToLocationForEventDto(event.getLocation()))
                 .paid(event.isPaid())
                 .participantLimit(event.getParticipantLimit())
                 .requestModeration(event.isRequestModeration())
@@ -157,7 +171,7 @@ public class MapperUtil {
     }
 
     public static LocationDto convertToLocationDto(Location location) {
-        return new LocationDto(location.getLat(), location.getLon());
+        return modelMapper.map(location, LocationDto.class);
     }
 
     public static UserDto convertToUserDto(User user) {

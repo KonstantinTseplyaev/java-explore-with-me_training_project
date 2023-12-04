@@ -31,10 +31,12 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "where (e.initiator.id in :users or :users is null) " +
             "and (e.state in :states or :states is null) " +
             "and (e.category.id in :categories or :categories is null) " +
+            "and (e.location.id in :locations or :locations is null) " +
             "and (e.eventDate between :start and :end)")
     List<Event> findEventsByParam(List<Long> users,
                                   List<EventState> states,
                                   List<Long> categories,
+                                  List<Long> locations,
                                   LocalDateTime start,
                                   LocalDateTime end, Pageable pageable);
 
@@ -59,4 +61,11 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Modifying
     @Query(value = "update events set views = :currentViews where id = :id", nativeQuery = true)
     void updateEventViews(long id, long currentViews);
+
+    @Query("from Event as e " +
+            "where e.state = 'PUBLISHED' " +
+            "and e.location.id in " +
+            "(select id from Location as l " +
+            "where distance(l.lat, l.lon, :latZone, :lonZone) <= :lonRad)")
+    List<Event> findEventsByLocationZone(double latZone, double lonZone, double lonRad);
 }

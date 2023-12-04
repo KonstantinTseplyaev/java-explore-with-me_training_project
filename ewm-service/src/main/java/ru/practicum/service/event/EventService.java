@@ -5,6 +5,7 @@ import ru.practicum.model.event.EventShortRequestParam;
 import ru.practicum.model.event.dto.EventCreationDto;
 import ru.practicum.model.event.dto.EventDto;
 import ru.practicum.model.event.dto.EventShortDto;
+import ru.practicum.model.location.dto.LocationDto;
 import ru.practicum.model.event.dto.UpdatedEventDto;
 
 import java.util.List;
@@ -26,4 +27,14 @@ public interface EventService {
     EventDto getPublicEventById(long id, long views);
 
     List<EventShortDto> getPublicEventsByParam(EventShortRequestParam param);
+
+    LocationDto addLocation(LocationDto locationDto);
+
+    List<LocationDto> getAllLocations(int from, int size);
+
+    LocationDto getLocationById(long locId);
+
+    List<EventDto> getEventsByLocationZone(long zoneId);
+
+    LocationDto updateLocation(LocationDto updatedLocationDto);
 }
