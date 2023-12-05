@@ -1,8 +1,8 @@
 {
 	"info": {
 		"_postman_id": "5a981791-948b-42e0-b786-a38ede9c4878",
-		"name": "Feature (locations)",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"name": "Test Explore With Me - Feature (locations)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "27994500"
 	},
 	"item": [
@@ -35,9 +35,23 @@
 					}
 				}
 			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"name\": \"Konstantin\",\r\n    \"email\": \"konstant.2302@mail.ru\"\r\n}",
@@ -47,16 +61,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{baseUrl}}/admin/users",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"admin",
-						"users"
-					]
-				}
+				"url": "{{baseUrl}}/admin/users"
 			},
 			"response": []
 		},
@@ -92,7 +97,18 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"name\": \"Elizabeth\",\r\n    \"email\": \"elza.666@mail.ru\"\r\n}",
@@ -102,16 +118,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{baseUrl}}/admin/users",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"admin",
-						"users"
-					]
-				}
+				"url": "{{baseUrl}}/admin/users"
 			},
 			"response": []
 		},
@@ -146,7 +153,18 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"name\": \"Концерты\"\r\n}",
@@ -156,16 +174,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{baseUrl}}/admin/categories",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"admin",
-						"categories"
-					]
-				}
+				"url": "{{baseUrl}}/admin/categories"
 			},
 			"response": []
 		},
@@ -200,7 +209,18 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"name\": \"Кемпинг\"\r\n}",
@@ -210,16 +230,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{baseUrl}}/admin/categories",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"admin",
-						"categories"
-					]
-				}
+				"url": "{{baseUrl}}/admin/categories"
 			},
 			"response": []
 		},
@@ -260,7 +271,18 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"lat\": \"51.660779\",\r\n    \"lon\": \"39.200292\",\r\n    \"name\": \"Воронеж\",\r\n    \"radius\": \"8000.00\"\r\n}",
@@ -270,16 +292,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{baseUrl}}/admin/locations",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{baseUrl}}/admin/locations"
 			},
 			"response": []
 		},
@@ -320,7 +333,18 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"lat\": \"51.66282\",\r\n    \"lon\": \"39.20404\",\r\n    \"name\": \"Петровский сквер, Воронеж\",\r\n    \"radius\": \"298.25\"\r\n}",
@@ -330,16 +354,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{baseUrl}}/admin/locations",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{baseUrl}}/admin/locations"
 			},
 			"response": []
 		},
@@ -380,7 +395,18 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"lat\": \"51.699586\",\r\n    \"lon\": \"39.176017\",\r\n    \"name\": \"Коминтерновское кладбище\",\r\n    \"radius\": \"500.00\"\r\n}",
@@ -390,16 +416,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{baseUrl}}/admin/locations",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{baseUrl}}/admin/locations"
 			},
 			"response": []
 		},
@@ -454,7 +471,18 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n  \"annotation\": \"Общегородская сходка готов\",\r\n  \"category\": {{c2id}},\r\n  \"description\": \"fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\",\r\n  \"eventDate\": \"2023-12-18 23:50:00\",\r\n  \"location\": {\r\n    \"id\": {{l3id}}\r\n  },\r\n  \"paid\": false,\r\n  \"participantLimit\": 30,\r\n  \"requestModeration\": true,\r\n  \"title\": \"ааааааааааааааааававававававааааааааааааааааа\"\r\n}",
@@ -465,14 +493,21 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/{{u2id}}/events",
+					"raw": "{{baseUrl}}/users/:userId/events",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"{{u2id}}",
+						":userId",
 						"events"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{u2id}}",
+							"description": "id текущего пользователя"
+						}
 					]
 				}
 			},
@@ -529,7 +564,18 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n  \"annotation\": \"Пикник на набережной в сквере\",\r\n  \"category\": {{c2id}},\r\n  \"description\": \"fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\",\r\n  \"eventDate\": \"2024-06-12 12:00:00\",\r\n  \"location\": {\r\n    \"lat\": \"51.658970\",\r\n    \"lon\": \"39.236063\"\r\n  },\r\n  \"paid\": true,\r\n  \"participantLimit\": 7,\r\n  \"requestModeration\": true,\r\n  \"title\": \"ааааааааааааааааававававававааааааааааааааааа\"\r\n}",
@@ -540,14 +586,21 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/{{u1id}}/events",
+					"raw": "{{baseUrl}}/users/:userId/events",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"{{u1id}}",
+						":userId",
 						"events"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{u1id}}",
+							"description": "id текущего пользователя"
+						}
 					]
 				}
 			},
@@ -590,7 +643,18 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"lat\": \"48.912925\",\r\n    \"lon\": \"2.467391\",\r\n    \"name\": \"Paris, Bondy\",\r\n    \"radius\": \"2800.00\"\r\n}",
@@ -600,16 +664,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{baseUrl}}/admin/locations",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{baseUrl}}/admin/locations"
 			},
 			"response": []
 		},
@@ -664,7 +719,18 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n  \"annotation\": \"Concert de Mireille Mathieu\",\r\n  \"category\": {{c1id}},\r\n  \"description\": \"fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\",\r\n  \"eventDate\": \"2024-01-12 16:00:00\",\r\n  \"location\": {\r\n    \"id\": {{l5id}}\r\n  },\r\n  \"paid\": true,\r\n  \"participantLimit\": 2800,\r\n  \"requestModeration\": false,\r\n  \"title\": \"ааааааааааааааааававававававааааааааааааааааа\"\r\n}",
@@ -675,14 +741,21 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/{{u1id}}/events",
+					"raw": "{{baseUrl}}/users/:userId/events",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"{{u1id}}",
+						":userId",
 						"events"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{u1id}}",
+							"description": "id текущего пользователя"
+						}
 					]
 				}
 			},
@@ -692,7 +765,13 @@
 			"name": "Публикация события 1 администратором",
 			"request": {
 				"method": "PATCH",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"stateAction\": \"PUBLISH_EVENT\"\r\n}",
@@ -703,14 +782,21 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/admin/events/{{e1id}}",
+					"raw": "{{baseUrl}}/admin/events/:eventId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"admin",
 						"events",
-						"{{e1id}}"
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{e1id}}",
+							"description": "id публикуемого события"
+						}
 					]
 				}
 			},
@@ -720,7 +806,13 @@
 			"name": "Публикация события 2 администратором",
 			"request": {
 				"method": "PATCH",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"stateAction\": \"PUBLISH_EVENT\"\r\n}",
@@ -731,14 +823,21 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/admin/events/{{e2id}}",
+					"raw": "{{baseUrl}}/admin/events/:eventId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"admin",
 						"events",
-						"{{e2id}}"
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{e2id}}",
+							"description": "id публикуемого события"
+						}
 					]
 				}
 			},
@@ -748,7 +847,13 @@
 			"name": "Публикация события 3 администратором",
 			"request": {
 				"method": "PATCH",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"stateAction\": \"PUBLISH_EVENT\"\r\n}",
@@ -759,14 +864,21 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/admin/events/{{e3id}}",
+					"raw": "{{baseUrl}}/admin/events/:eventId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"admin",
 						"events",
-						"{{e3id}}"
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{e3id}}",
+							"description": "id публикуемого события"
+						}
 					]
 				}
 			},
@@ -836,16 +948,29 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "{{baseUrl}}/users/{{u1id}}/locations",
+					"raw": "{{baseUrl}}/users/:userId/locations",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"{{u1id}}",
+						":userId",
 						"locations"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{u1id}}",
+							"description": "id текущего пользователя"
+						}
 					]
 				}
 			},
@@ -882,17 +1007,35 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "{{baseUrl}}/users/{{u2id}}/locations/{{l5id}}",
+					"raw": "{{baseUrl}}/users/:userId/locations/:locId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"{{u2id}}",
+						":userId",
 						"locations",
-						"{{l5id}}"
+						":locId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{u2id}}",
+							"description": "id текущего пользователя"
+						},
+						{
+							"key": "locId",
+							"value": "{{l5id}}",
+							"description": "id искомой локации"
+						}
 					]
 				}
 			},
@@ -934,18 +1077,36 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "{{baseUrl}}/users/{{u1id}}/events/locations/{{l1id}}",
+					"raw": "{{baseUrl}}/users/:userId/events/locations/:locId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"{{u1id}}",
+						":userId",
 						"events",
 						"locations",
-						"{{l1id}}"
+						":locId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{u1id}}",
+							"description": "id текущего пользователя"
+						},
+						{
+							"key": "locId",
+							"value": "{{l1id}}",
+							"description": "id локации для поиска"
+						}
 					]
 				}
 			},
@@ -980,18 +1141,36 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "{{baseUrl}}/users/{{u1id}}/events/locations/{{l5id}}",
+					"raw": "{{baseUrl}}/users/:userId/events/locations/:locId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"{{u1id}}",
+						":userId",
 						"events",
 						"locations",
-						"{{l5id}}"
+						":locId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{u1id}}",
+							"description": "id текущего пользователя"
+						},
+						{
+							"key": "locId",
+							"value": "{{l5id}}",
+							"description": "id локации для поиска"
+						}
 					]
 				}
 			},
@@ -1034,7 +1213,18 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"lat\": \"59.614018\",\r\n    \"lon\": \"150.789763\",\r\n    \"name\": \"Магадан\"\r\n}",
@@ -1044,16 +1234,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{baseUrl}}/admin/locations",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{baseUrl}}/admin/locations"
 			},
 			"response": []
 		},
@@ -1078,18 +1259,36 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "{{baseUrl}}/users/{{u1id}}/events/locations/{{l6id}}",
+					"raw": "{{baseUrl}}/users/:userId/events/locations/:locId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"{{u1id}}",
+						":userId",
 						"events",
 						"locations",
-						"{{l6id}}"
+						":locId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{u1id}}",
+							"description": "id текущего пользователя"
+						},
+						{
+							"key": "locId",
+							"value": "{{l6id}}",
+							"description": "id локации для поиска"
+						}
 					]
 				}
 			},
