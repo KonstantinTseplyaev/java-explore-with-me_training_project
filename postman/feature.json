@@ -1319,7 +1319,7 @@
 		{
 			"key": "baseUrl",
 			"value": "http://localhost:8080",
-			"type": "number"
+			"type": "string"
 		},
 		{
 			"key": "u1id",
