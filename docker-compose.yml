@@ -6,7 +6,7 @@ services:
       - /var/lib/postgresql/data/
     container_name: ewm-stat-db
     ports:
-      - "5435:5432"
+      - "5444:5432"
     environment:
       - POSTGRES_DB=ewm-stats
       - POSTGRES_USER=Konstantin
@@ -18,7 +18,7 @@ services:
       - /var/lib/postgresql/data/
     container_name: ewm-db
     ports:
-      - "5433:5432"
+      - "5455:5432"
     environment:
       - POSTGRES_DB=ewm
       - POSTGRES_USER=Konstantin
