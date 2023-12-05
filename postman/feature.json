@@ -1118,24 +1118,69 @@
 	],
 	"variable": [
 		{
-			"value": "",
-			"type": "number",
-			"disabled": true
+			"key": "BASE-URL",
+			"value": "http://localhost:8080",
+			"type": "number"
 		},
 		{
+			"key": "u1id",
 			"value": "",
-			"type": "string",
-			"disabled": true
+			"type": "string"
 		},
 		{
+			"key": "u2id",
 			"value": "",
-			"type": "string",
-			"disabled": true
+			"type": "string"
 		},
 		{
+			"key": "c1id",
 			"value": "",
-			"type": "string",
-			"disabled": true
+			"type": "string"
+		},
+		{
+			"key": "c2id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "l1id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "l2id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "l3id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "l5id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "l6id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "e1id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "e2id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "e3id",
+			"value": "",
+			"type": "string"
 		}
 	]
 }
