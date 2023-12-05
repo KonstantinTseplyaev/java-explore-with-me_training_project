@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "5a981791-948b-42e0-b786-a38ede9c4878",
 		"name": "Feature (locations)",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "27994500"
 	},
 	"item": [
@@ -47,16 +47,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/admin/users",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"admin",
-						"users"
-					]
-				}
+				"url": "{{BASE-URL}}/admin/users"
 			},
 			"response": []
 		},
@@ -102,16 +93,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/admin/users",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"admin",
-						"users"
-					]
-				}
+				"url": "{{BASE-URL}}/admin/users"
 			},
 			"response": []
 		},
@@ -156,16 +138,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/admin/categories",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"admin",
-						"categories"
-					]
-				}
+				"url": "{{BASE-URL}}/admin/categories"
 			},
 			"response": []
 		},
@@ -210,16 +183,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/admin/categories",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"admin",
-						"categories"
-					]
-				}
+				"url": "{{BASE-URL}}/admin/categories"
 			},
 			"response": []
 		},
@@ -270,16 +234,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/admin/locations",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE-URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -330,16 +285,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/admin/locations",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE-URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -390,16 +336,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/admin/locations",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE-URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -464,17 +401,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/users/{{u2id}}/events",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"users",
-						"{{u2id}}",
-						"events"
-					]
-				}
+				"url": "{{BASE-URL}}/users/{{u2id}}/events"
 			},
 			"response": []
 		},
@@ -539,17 +466,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/users/{{u1id}}/events",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"users",
-						"{{u1id}}",
-						"events"
-					]
-				}
+				"url": "{{BASE-URL}}/users/{{u1id}}/events"
 			},
 			"response": []
 		},
@@ -600,16 +517,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/admin/locations",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE-URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -674,17 +582,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/users/{{u1id}}/events",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"users",
-						"{{u1id}}",
-						"events"
-					]
-				}
+				"url": "{{BASE-URL}}/users/{{u1id}}/events"
 			},
 			"response": []
 		},
@@ -702,17 +600,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/admin/events/{{e1id}}",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"admin",
-						"events",
-						"{{e1id}}"
-					]
-				}
+				"url": "{{BASE-URL}}/admin/events/{{e1id}}"
 			},
 			"response": []
 		},
@@ -730,17 +618,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/admin/events/{{e2id}}",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"admin",
-						"events",
-						"{{e2id}}"
-					]
-				}
+				"url": "{{BASE-URL}}/admin/events/{{e2id}}"
 			},
 			"response": []
 		},
@@ -758,17 +636,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/admin/events/{{e3id}}",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"admin",
-						"events",
-						"{{e3id}}"
-					]
-				}
+				"url": "{{BASE-URL}}/admin/events/{{e3id}}"
 			},
 			"response": []
 		},
@@ -837,17 +705,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{BASE-URL}}/users/{{u1id}}/locations",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"users",
-						"{{u1id}}",
-						"locations"
-					]
-				}
+				"url": "{{BASE-URL}}/users/{{u1id}}/locations"
 			},
 			"response": []
 		},
@@ -883,18 +741,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{BASE-URL}}/users/{{u2id}}/locations/{{l5id}}",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"users",
-						"{{u2id}}",
-						"locations",
-						"{{l5id}}"
-					]
-				}
+				"url": "{{BASE-URL}}/users/{{u2id}}/locations/{{l5id}}"
 			},
 			"response": []
 		},
@@ -935,19 +782,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{BASE-URL}}/users/{{u1id}}/events/locations/{{l1id}}",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"users",
-						"{{u1id}}",
-						"events",
-						"locations",
-						"{{l1id}}"
-					]
-				}
+				"url": "{{BASE-URL}}/users/{{u1id}}/events/locations/{{l1id}}"
 			},
 			"response": []
 		},
@@ -981,19 +816,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{BASE-URL}}/users/{{u1id}}/events/locations/{{l5id}}",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"users",
-						"{{u1id}}",
-						"events",
-						"locations",
-						"{{l5id}}"
-					]
-				}
+				"url": "{{BASE-URL}}/users/{{u1id}}/events/locations/{{l5id}}"
 			},
 			"response": []
 		},
@@ -1044,16 +867,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE-URL}}/admin/locations",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"admin",
-						"locations"
-					]
-				}
+				"url": "{{BASE-URL}}/admin/locations"
 			},
 			"response": []
 		},
@@ -1079,19 +893,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{BASE-URL}}/users/{{u1id}}/events/locations/{{l6id}}",
-					"host": [
-						"{{BASE-URL}}"
-					],
-					"path": [
-						"users",
-						"{{u1id}}",
-						"events",
-						"locations",
-						"{{l6id}}"
-					]
-				}
+				"url": "{{BASE-URL}}/users/{{u1id}}/events/locations/{{l6id}}"
 			},
 			"response": []
 		}
