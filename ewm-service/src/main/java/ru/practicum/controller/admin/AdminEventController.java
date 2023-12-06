@@ -33,9 +33,10 @@ public class AdminEventController {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @GetMapping()
-    public List<EventDto> getEvents(@RequestParam(required = false) List<Long> users,
+    public List<EventDto> getEvents(@RequestParam(required = false) List<Long> users,  //добавил для админа возможность поиска по локации
                                     @RequestParam(required = false) List<EventState> states,
                                     @RequestParam(required = false) List<Long> categories,
+                                    @RequestParam(required = false) List<Long> locations,
                                     @RequestParam(defaultValue = "1900-01-01 01:01:01") String rangeStart,
                                     @RequestParam(defaultValue = "2199-12-31 23:59:59") String rangeEnd,
                                     @RequestParam(defaultValue = "0") @PositiveOrZero int from,
@@ -44,6 +45,7 @@ public class AdminEventController {
                 .users(users)
                 .states(states)
                 .categories(categories)
+                .locations(locations)
                 .rangeStart(LocalDateTime.parse(rangeStart, formatter))
                 .rangeEnd(LocalDateTime.parse(rangeEnd, formatter))
                 .from(from)

@@ -1,6 +1,7 @@
-package ru.practicum.model.event;
+package ru.practicum.model.location;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,10 +16,13 @@ import javax.persistence.Table;
 @Table(name = "locations", schema = "public")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private String name;
+    private Double radius;
     private double lat;
     private double lon;
 }

@@ -86,4 +86,10 @@ public class PrivateEventController {
                 "текущего пользователя {}. {}", eventId, userId, requestUpdatedDto);
         return requestService.updateRequestsStates(userId, eventId, requestUpdatedDto);
     }
+
+    @GetMapping("/locations/{zoneId}")
+    public List<EventDto> getEventsByLocationZone(@PathVariable long zoneId) {
+        log.info("Get-запрос: получение событий, проходящих в пределах локации {}", zoneId);
+        return eventService.getEventsByLocationZone(zoneId);
+    }
 }

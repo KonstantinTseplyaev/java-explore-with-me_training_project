@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @RestControllerAdvice
@@ -27,9 +28,16 @@ public class ResponseExceptionHandler extends DefaultHandlerExceptionResolver {
     }
 
     @ExceptionHandler(value = RequestEventException.class)
-    public ResponseEntity<Map<String, String>> handleERequestEventExp(final RequestEventException exp) {
+    public ResponseEntity<Map<String, String>> handleRequestEventExp(final RequestEventException exp) {
         log.error(exp.getMessage());
         return ResponseEntity.status(409).body((Map.of("error", "Ошибка при запросе на участие в событии",
+                "errorMessage", exp.getMessage())));
+    }
+
+    @ExceptionHandler(value = LocationException.class)
+    public ResponseEntity<Map<String, String>> handleLocationExp(final LocationException exp) {
+        log.error(exp.getMessage());
+        return ResponseEntity.status(409).body((Map.of("error", "Ошибка при поиске ивента по локации",
                 "errorMessage", exp.getMessage())));
     }
 
@@ -45,7 +53,7 @@ public class ResponseExceptionHandler extends DefaultHandlerExceptionResolver {
         log.error(exp.getMessage());
         return ResponseEntity.status(409).body((Map.of("error", "Ошибка при указании нового email/name. " +
                         "Такое значение уже существует!",
-                "errorMessage", exp.getMessage())));
+                "errorMessage", Objects.requireNonNull(exp.getMessage()))));
     }
 
     @ExceptionHandler(value = ParamValidException.class)

@@ -12,6 +12,7 @@ public class EventRequestParam {
     private List<Long> users;
     private List<EventState> states;
     private List<Long> categories;
+    private List<Long> locations;
     private LocalDateTime rangeStart;
     private LocalDateTime rangeEnd;
     private int from;

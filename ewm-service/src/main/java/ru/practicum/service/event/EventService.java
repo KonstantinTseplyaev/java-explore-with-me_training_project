@@ -26,4 +26,6 @@ public interface EventService {
     EventDto getPublicEventById(long id, long views);
 
     List<EventShortDto> getPublicEventsByParam(EventShortRequestParam param);
+
+    List<EventDto> getEventsByLocationZone(long zoneId);
 }
