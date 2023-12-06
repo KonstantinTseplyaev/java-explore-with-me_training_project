@@ -16,4 +16,6 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
     Optional<Location> findByIdAndNameIsNotNull(long locId);
 
     boolean existsByLatAndLonAndRadius(double lat, double lon, double radius);
+
+    Optional<Location> findByIdAndNameIsNull(long locId);
 }

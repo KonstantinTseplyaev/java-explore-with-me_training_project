@@ -24,7 +24,6 @@ import ru.practicum.model.event.dto.EventCreationDto;
 import ru.practicum.model.event.dto.EventDto;
 import ru.practicum.model.event.dto.EventShortDto;
 import ru.practicum.model.location.dto.LocationCreationDto;
-import ru.practicum.model.location.dto.LocationDto;
 import ru.practicum.model.event.dto.UpdatedEventDto;
 import ru.practicum.model.request.RequestState;
 import ru.practicum.model.request.dto.RequestDto;
@@ -219,32 +218,6 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public LocationDto addLocation(LocationDto locationDto) {
-        if (locationRepository.existsByLatAndLonAndRadius(locationDto.getLat(),
-                locationDto.getLon(), locationDto.getRadius())) {
-            throw new LocationException("Location already exists!");
-        }
-        Location location = locationRepository.save(MapperUtil.convertToLocation(locationDto));
-        return MapperUtil.convertToLocationDto(location);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<LocationDto> getAllLocations(int from, int size) {
-        Pageable page = PageRequest.of(from / size, size);
-        List<Location> locations = locationRepository.findByNameIsNotNull(page);
-        return MapperUtil.convertList(locations, MapperUtil::convertToLocationDto);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public LocationDto getLocationById(long locId) {
-        Location location = locationRepository.findByIdAndNameIsNotNull(locId)
-                .orElseThrow(() -> new ModelNotFoundException("Location with id " + locId + " was not found"));
-        return MapperUtil.convertToLocationDto(location);
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public List<EventDto> getEventsByLocationZone(long zoneId) {
         Location zone = locationRepository.findById(zoneId)
@@ -254,15 +227,6 @@ public class EventServiceImpl implements EventService {
         }
         List<Event> events = eventRepository.findEventsByLocationZone(zone.getLat(), zone.getLon(), zone.getRadius());
         return MapperUtil.convertList(events, MapperUtil::convertToEventDto);
-    }
-
-    @Override
-    public LocationDto updateLocation(LocationDto updatedLocationDto) {
-        Location location = locationRepository.findById(updatedLocationDto.getId())
-                .orElseThrow(() -> new ModelNotFoundException("Location with id " + updatedLocationDto.getId() +
-                        " was not found"));
-        location.setName(updatedLocationDto.getName());
-        return MapperUtil.convertToLocationDto(locationRepository.save(location));
     }
 
     private String createSortForQuery(String sort) {

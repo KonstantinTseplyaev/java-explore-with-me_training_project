@@ -375,8 +375,10 @@
 							"    const target = pm.response.json();\r",
 							"\r",
 							"    const l3id = target.id;\r",
+							"    const l4id = target.id + 1;\r",
 							"\r",
 							"    pm.environment.set(\"l3id\", l3id);\r",
+							"    pm.environment.set(\"l4id\", l4id);\r",
 							"\r",
 							"    pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
 							"    pm.expect(target.id).to.not.be.null;\r",
@@ -955,24 +957,7 @@
 						"type": "text"
 					}
 				],
-				"url": {
-					"raw": "{{baseUrl}}/users/:userId/locations",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"users",
-						":userId",
-						"locations"
-					],
-					"variable": [
-						{
-							"key": "userId",
-							"value": "{{u1id}}",
-							"description": "id текущего пользователя"
-						}
-					]
-				}
+				"url": "{{baseUrl}}/locations"
 			},
 			"response": []
 		},
@@ -1015,22 +1000,15 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/users/:userId/locations/:locId",
+					"raw": "{{baseUrl}}/locations/:locId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
-						"users",
-						":userId",
 						"locations",
 						":locId"
 					],
 					"variable": [
-						{
-							"key": "userId",
-							"value": "{{u2id}}",
-							"description": "id текущего пользователя"
-						},
 						{
 							"key": "locId",
 							"value": "{{l5id}}",
@@ -1291,6 +1269,256 @@
 						}
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление имени пользовательской локации для перевода в публичный статус",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(200);  \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"    const target = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Даннве локации должны быть корректными\", function () {\r",
+							"    pm.expect(target.id).to.be.not.null;\r",
+							"    pm.expect(target.name).equal(\"Новая опубликованная локация\");\r",
+							"    pm.expect(target.lat).equal(51.658970);\r",
+							"    pm.expect(target.lon).equal(39.236063);\r",
+							"    pm.expect(target.radius).equal(0.0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Новая опубликованная локация\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseUrl}}/admin/locations/{{l4id}}/public"
+			},
+			"response": []
+		},
+		{
+			"name": "Получение всех добавленных админом локаций (с учетом вновь добавленной)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200 и список локаций в формате json\", function () {\r",
+							"    pm.response.to.have.status(200);  \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.expect(body).is.an(\"array\");\r",
+							"});\r",
+							"\r",
+							"const firstLoc = body[0];\r",
+							"\r",
+							"pm.test(\"Локация должна содержать поля: id, name, lat, lon, radius\", function () {\r",
+							"    pm.expect(firstLoc.id).to.not.be.null;\r",
+							"    pm.expect(firstLoc.name).equal(\"Воронеж\");\r",
+							"    pm.expect(firstLoc.lat).equal(51.660779);\r",
+							"    pm.expect(firstLoc.lon).equal(39.200292);\r",
+							"    pm.expect(firstLoc.radius).equal(8000.00);\r",
+							"});\r",
+							"\r",
+							"const secondLoc = body[1];\r",
+							"\r",
+							"pm.test(\"Локация должна содержать поля: id, name, lat, lon, radius\", function () {\r",
+							"    pm.expect(secondLoc.id).to.not.be.null;\r",
+							"    pm.expect(secondLoc.name).equal(\"Петровский сквер, Воронеж\");\r",
+							"    pm.expect(secondLoc.lat).equal(51.66282);\r",
+							"    pm.expect(secondLoc.lon).equal(39.20404);\r",
+							"    pm.expect(secondLoc.radius).equal(298.25);\r",
+							"});\r",
+							"\r",
+							"const thirdLoc = body[2];\r",
+							"\r",
+							"pm.test(\"Локация должна содержать поля: id, name, lat, lon, radius\", function () {\r",
+							"    pm.expect(thirdLoc.id).to.not.be.null;\r",
+							"    pm.expect(thirdLoc.name).equal(\"Коминтерновское кладбище\");\r",
+							"    pm.expect(thirdLoc.lat).equal(51.699586);\r",
+							"    pm.expect(thirdLoc.lon).equal(39.176017);\r",
+							"    pm.expect(thirdLoc.radius).equal(500.00);\r",
+							"});\r",
+							"\r",
+							"const fourthLoc = body[3];\r",
+							"\r",
+							"pm.test(\"Локация должна содержать поля: id, name, lat, lon, radius\", function () {\r",
+							"    pm.expect(fourthLoc.id).to.not.be.null;\r",
+							"    pm.expect(fourthLoc.name).equal(\"Paris, Bondy\");\r",
+							"    pm.expect(fourthLoc.lat).equal(48.912925);\r",
+							"    pm.expect(fourthLoc.lon).equal(2.467391);\r",
+							"    pm.expect(fourthLoc.radius).equal(2800.00);\r",
+							"});\r",
+							"\r",
+							"const fifththLoc = body[4];\r",
+							"\r",
+							"pm.test(\"Локация должна содержать поля: id, name, lat, lon, radius\", function () {\r",
+							"    pm.expect(fifththLoc.id).to.not.be.null;\r",
+							"    pm.expect(fifththLoc.name).equal(\"Магадан\");\r",
+							"    pm.expect(fifththLoc.lat).equal(59.614018);\r",
+							"    pm.expect(fifththLoc.lon).equal(150.789763);\r",
+							"    pm.expect(fifththLoc.radius).equal(0.0);\r",
+							"});\r",
+							"\r",
+							"const sixthLoc = body[5];\r",
+							"\r",
+							"pm.test(\"Локация должна содержать поля: id, name, lat, lon, radius\", function () {\r",
+							"    pm.expect(sixthLoc.id).to.not.be.null;\r",
+							"    pm.expect(sixthLoc.name).equal(\"Новая опубликованная локация\");\r",
+							"    pm.expect(sixthLoc.lat).equal(51.658970);\r",
+							"    pm.expect(sixthLoc.lon).equal(39.236063);\r",
+							"    pm.expect(sixthLoc.radius).equal(0.0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/locations"
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление локации c name length > 501, администратором",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 400\", function () {\r",
+							"    pm.response.to.have.status(400);  \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lat\": \"50.66282\",\r\n    \"lon\": \"29.20404\",\r\n    \"name\": \"fhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh\",\r\n    \"radius\": \"298.25\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseUrl}}/admin/locations"
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление админом локации с уже существующими параметрами",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 409\", function () {\r",
+							"    pm.response.to.have.status(409);  \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lat\": \"48.912925\",\r\n    \"lon\": \"2.467391\",\r\n    \"name\": \"Paris, France\",\r\n    \"radius\": \"2800.00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseUrl}}/admin/locations"
+			},
+			"response": []
+		},
+		{
+			"name": "удаление локации, к которой привязано событие",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 409\", function () {\r",
+							"    pm.response.to.have.status(409);  \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "{{baseUrl}}/admin/locations/{{l3id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Получение несуществующей локации по id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 404\", function () {\r",
+							"    pm.response.to.have.status(404);  \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/locations/999999"
 			},
 			"response": []
 		}

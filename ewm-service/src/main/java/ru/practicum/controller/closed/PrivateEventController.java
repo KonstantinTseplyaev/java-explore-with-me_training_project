@@ -88,7 +88,6 @@ public class PrivateEventController {
     }
 
     @GetMapping("/locations/{zoneId}")
-    //если радиус локации 0 - выбросит ошибку. Думаю, оставить так, или сделать, чтобы вернул ивент, проходящий именно в этой локации
     public List<EventDto> getEventsByLocationZone(@PathVariable long zoneId) {
         log.info("Get-запрос: получение событий, проходящих в пределах локации {}", zoneId);
         return eventService.getEventsByLocationZone(zoneId);
