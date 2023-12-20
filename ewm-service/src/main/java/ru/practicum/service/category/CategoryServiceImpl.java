@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exceptions.ModelNotFoundException;
-import ru.practicum.mapper.MapperUtil;
+import ru.practicum.util.MapperUtil;
 import ru.practicum.model.category.Category;
 import ru.practicum.model.category.dto.CategoryDto;
 import ru.practicum.repository.CategoryRepository;
