@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exceptions.ModelNotFoundException;
 import ru.practicum.exceptions.RequestEventException;
-import ru.practicum.mapper.MapperUtil;
+import ru.practicum.util.MapperUtil;
 import ru.practicum.model.event.Event;
 import ru.practicum.model.request.Request;
 import ru.practicum.model.request.RequestState;

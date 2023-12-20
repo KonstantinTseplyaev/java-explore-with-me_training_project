@@ -13,7 +13,7 @@ import ru.practicum.exceptions.EventDateIncorrectException;
 import ru.practicum.exceptions.EventStateException;
 import ru.practicum.exceptions.LocationException;
 import ru.practicum.exceptions.ModelNotFoundException;
-import ru.practicum.mapper.MapperUtil;
+import ru.practicum.util.MapperUtil;
 import ru.practicum.model.category.Category;
 import ru.practicum.model.event.Event;
 import ru.practicum.model.event.EventRequestParam;

@@ -21,4 +21,8 @@ public class UserCreationDto {
     @Length(min = 2, max = 250)
     @NotBlank
     private String name;
+    @Length(min = 10, max = 50)
+    @NotBlank
+    private String password;
+    private String confirmPassword;
 }
